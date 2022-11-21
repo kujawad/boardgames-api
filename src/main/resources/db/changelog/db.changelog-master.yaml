@@ -1,0 +1,79 @@
+databaseChangeLog:
+  - property:
+      name: uuid_type
+      value: uuid
+      dbms: postgresql
+  - property:
+      name: uuid_function
+      value: uuid_generate_v4()
+      dbms: postgresql
+  - logicalFilePath: classpath:db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: "TIER-LIST-1"
+      author: kujawad
+      changes:
+        - sql:
+            dbms: 'postgresql'
+            sql: 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA "tier-list";'
+  - changeSet:
+      id: "TIER-LIST-2"
+      author: kujawad
+      changes:
+        - createTable:
+            tableName: boardgames
+            columns:
+              - column:
+                  name: id
+                  type: ${uuid_type}
+                  defaultValueComputed: ${uuid_function}
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    unique: true
+              - column:
+                  name: name
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: "TIER-LIST-3"
+      author: kujawad
+      changes:
+        - addColumn:
+            tableName: boardgames
+            columns:
+              - column:
+                  name: rating
+                  type: int
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: "TIER-LIST-4"
+      author: kujawad
+      changes:
+        - addColumn:
+            tableName: boardgames
+            columns:
+              - column:
+                  name: public_id
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: "TIER-LIST-5"
+      author: kujawad
+      changes:
+        - addColumn:
+            tableName: boardgames
+            columns:
+              - column:
+                  name: creation_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modification_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+
